@@ -114,8 +114,8 @@ var paddleX = PADDLE_INITIAL_X;
 
 var ballX = BALL_INITIAL_X;
 var ballY = BALL_INITIAL_Y;
-var ballDirectionY = 1
-var ballDirectionX = 1
+var ballDirectionY = -1
+var ballDirectionX = -1
 
 
 document.addEventListener("keydown", handleKeyPress);
