@@ -26,6 +26,7 @@ const BALL_COLOR = "red";
 var BALL_SPEED = 3;
 const BALL_INITIAL_X = (CANVAS_WIDTH - PADDLE_W) / 2;
 const BALL_INITIAL_Y = (CANVAS_HEIGHT - PADDLE_H) / 100 * 10; // 10%
+const BALL_SCORE_ACCELERATION = 5000
 
 
 const ARROW_LEFT = 37;
@@ -127,7 +128,7 @@ function updateGame(){
     drawPaddle(paddleX, PADDLE_INITIAL_Y);
     drawBall(ballX, ballY);
     updateScore()
-    BALL_SPEED += score / SCORE_JUMP / 1000
+    BALL_SPEED += score / SCORE_JUMP / BALL_SCORE_ACCELERATION
 }
 
 async function gameOver(){
