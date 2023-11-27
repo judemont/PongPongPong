@@ -1,21 +1,29 @@
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
+const dpr = window.devicePixelRatio;
+const rect = canvas.getBoundingClientRect();
+canvas.width = rect.width * dpr;
+canvas.height = rect.height * dpr;
+ctx.scale(dpr, dpr);
+canvas.style.width = `${rect.width}px`;
+canvas.style.height = `${rect.height}px`;
+
 const CANVAS_WIDTH = canvas.width;
 const CANVAS_HEIGHT = canvas.height;
 
-const SCREEN_UPDATE_DELAY = 50;
+const SCREEN_UPDATE_DELAY = 10;
 
-const PADDLE_W = 30;
-const PADDLE_H = 4;
+const PADDLE_W = 150;
+const PADDLE_H = 20;
 const PADDLE_COLOR = "green";
-const PADDLE_SPEED_X = PADDLE_W / 2;
+const PADDLE_SPEED_X = 50;
 const PADDLE_INITIAL_X = (CANVAS_WIDTH - PADDLE_W) / 2;
 const PADDLE_INITIAL_Y = (CANVAS_HEIGHT - PADDLE_H) / 100 * 90; // 90%
 
-const BALL_RADIUS = 3;
+const BALL_RADIUS = 15;
 const BALL_COLOR = "red";
-const BALL_SPEED = 3;
+var BALL_SPEED = 3;
 const BALL_INITIAL_X = (CANVAS_WIDTH - PADDLE_W) / 2;
 const BALL_INITIAL_Y = (CANVAS_HEIGHT - PADDLE_H) / 100 * 10; // 10%
 
@@ -29,12 +37,18 @@ const GAME_OVER_COLOR = "RED";
 const GAME_OVER_X = CANVAS_WIDTH / 2;
 const GAME_OVER_Y = CANVAS_HEIGHT / 2;
 
+const SCORE_JUMP = 50;
+const SCORE_TEXT = "SCORE : ";
+const SCORE_FONT = "30px Arial";
+const SCORE_COLOR = "RED";
+const SCORE_X = CANVAS_WIDTH / 100 * 5; // 5%
+const SCORE_Y = CANVAS_HEIGHT / 100 * 5; // 5%
 
 function clear() {
     ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 }
 
-function drawPaddle(x, y) {
+async function drawPaddle(x, y) {
     ctx.beginPath();
     ctx.rect(x, y, PADDLE_W, PADDLE_H);
     ctx.fillStyle = PADDLE_COLOR;
@@ -54,7 +68,7 @@ function paddleRight() {
     }
 }
 
-function drawBall(x, y) {
+async function drawBall(x, y) {
     ctx.beginPath();
     ctx.arc(x, y, BALL_RADIUS, 0, 2 * Math.PI);
     ctx.fillStyle = BALL_COLOR;
@@ -78,16 +92,29 @@ function handleKeyPress(event) {
 function moveBall() {
     if(ballX < 0 || ballX > CANVAS_WIDTH){
         ballDirectionX *= -1;
+        touchedWall = true;
     }
     if(ballY < 0){
         ballDirectionY *= -1;
+        touchedWall = true;
     }
     if(ballY + BALL_RADIUS >= PADDLE_INITIAL_Y && ballY - BALL_RADIUS <= PADDLE_INITIAL_Y + PADDLE_H && ballX + BALL_RADIUS >= paddleX && ballX - BALL_RADIUS <= paddleX + PADDLE_W){
+        if(touchedWall){
+            score += SCORE_JUMP
+            touchedWall = false
+        }
         ballDirectionY *= -1;
     }
 
     ballX += BALL_SPEED * ballDirectionX;
     ballY += BALL_SPEED * ballDirectionY;
+}
+
+async function updateScore(){
+    ctx.font = SCORE_FONT;
+    ctx.fillStyle = SCORE_COLOR;
+    ctx.textAlign = "center";
+    ctx.fillText(SCORE_TEXT + score, SCORE_X, SCORE_Y); 
 }
 
 function updateGame(){
@@ -99,9 +126,11 @@ function updateGame(){
     clear();
     drawPaddle(paddleX, PADDLE_INITIAL_Y);
     drawBall(ballX, ballY);
+    updateScore()
+    BALL_SPEED += score / SCORE_JUMP / 1000
 }
 
-function gameOver(){
+async function gameOver(){
     clearInterval(gameInterval)
     ctx.font = GAME_OVER_FONT;
     ctx.fillStyle = GAME_OVER_COLOR;
@@ -117,6 +146,9 @@ var ballY = BALL_INITIAL_Y;
 var ballDirectionY = -1
 var ballDirectionX = -1
 
+var score = 0;
+
+var touchedWall = false;
 
 document.addEventListener("keydown", handleKeyPress);
 
