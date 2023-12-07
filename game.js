@@ -94,11 +94,11 @@ function handleMouseMove(event) {
 
 function moveBall() {
     if(ballX < 0 || ballX > CANVAS_WIDTH){
-        ballDirectionX = (ballDirectionX*-1) + Math.random()/10;
+        ballDirectionX = (ballDirectionX*-1);
         touchedWall = true;
     }
     if(ballY < 0){
-        ballDirectionY = (ballDirectionY*-1) + Math.random()/10
+        ballDirectionY = (ballDirectionY*-1)
         touchedWall = true;
     }
     if(ballY + BALL_RADIUS >= PADDLE_INITIAL_Y && ballY - BALL_RADIUS <= PADDLE_INITIAL_Y + PADDLE_H && ballX + BALL_RADIUS >= paddleX && ballX - BALL_RADIUS <= paddleX + PADDLE_W){
@@ -106,7 +106,7 @@ function moveBall() {
             score += SCORE_JUMP
             touchedWall = false
         }
-        ballDirectionY = (ballDirectionY*-1) + Math.random()/10
+        ballDirectionY = (ballDirectionY*-1)
     }
 
     ballX += BALL_SPEED * ballDirectionX;
