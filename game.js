@@ -41,9 +41,16 @@ const GAME_OVER_Y = CANVAS_HEIGHT / 2;
 const SCORE_JUMP = 50;
 const SCORE_TEXT = "SCORE : ";
 const SCORE_FONT = "30px Arial";
-const SCORE_COLOR = "RED";
-const SCORE_X = CANVAS_WIDTH / 100 * 5; // 5%
+const SCORE_COLOR = "red";
+const SCORE_X = CANVAS_WIDTH / 100 * 7; // 7%
 const SCORE_Y = CANVAS_HEIGHT / 100 * 5; // 5%
+
+
+const BEST_SCORE_TEXT = "BEST SCORE : ";
+const BEST_SCORE_FONT = "30px Arial";
+const BEST_SCORE_COLOR = "green";
+const BEST_SCORE_X = CANVAS_WIDTH / 100 * 25; // 25%
+const BEST_SCORE_Y = CANVAS_HEIGHT / 100 * 5; // 5%
 
 function clear() {
     ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
@@ -111,6 +118,15 @@ async function updateScore(){
     ctx.fillStyle = SCORE_COLOR;
     ctx.textAlign = "center";
     ctx.fillText(SCORE_TEXT + score, SCORE_X, SCORE_Y); 
+
+    if(score > localStorage.getItem("bestScore")){
+        localStorage.setItem("bestScore", score);
+    }
+    
+    ctx.font = BEST_SCORE_FONT;
+    ctx.fillStyle = BEST_SCORE_COLOR;
+    ctx.textAlign = "center";
+    ctx.fillText(BEST_SCORE_TEXT + localStorage.getItem("bestScore"), BEST_SCORE_X, BEST_SCORE_Y); 
 }
 
 function updateGame(){
