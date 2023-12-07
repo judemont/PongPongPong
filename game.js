@@ -24,7 +24,7 @@ const PADDLE_INITIAL_Y = (CANVAS_HEIGHT - PADDLE_H) / 100 * 90; // 90%
 const BALL_RADIUS = 15;
 const BALL_COLOR = "red";
 var BALL_SPEED = 3;
-const BALL_INITIAL_X = (CANVAS_WIDTH - PADDLE_W) / 2;
+const BALL_INITIAL_X = (CANVAS_WIDTH - PADDLE_W) / 2 + random(-1000, 1000);
 const BALL_INITIAL_Y = (CANVAS_HEIGHT - PADDLE_H) / 100 * 10; // 10%
 const BALL_SCORE_ACCELERATION = 5000
 
@@ -76,27 +76,22 @@ async function drawBall(x, y) {
     ctx.fill();
 }
 
-function handleKeyPress(event) {
-    event.preventDefault();
-    const key = event.keyCode;
-    switch (key) {
-        case ARROW_LEFT:
-            paddleLeft();
-            break;
-
-        case ARROW_RIGHT:
-            paddleRight();
-            break;
+function handleMouseMove(event) {
+    const mouseX = event.screenX;
+    if(mouseX > paddleX + PADDLE_W){
+        paddleRight();
+    }else if(mouseX < paddleX) {
+        paddleLeft();
     }
 }
 
 function moveBall() {
     if(ballX < 0 || ballX > CANVAS_WIDTH){
-        ballDirectionX *= -1;
+        ballDirectionX = (ballDirectionX*-1) + Math.random()/10;
         touchedWall = true;
     }
     if(ballY < 0){
-        ballDirectionY *= -1;
+        ballDirectionY = (ballDirectionY*-1) + Math.random()/10
         touchedWall = true;
     }
     if(ballY + BALL_RADIUS >= PADDLE_INITIAL_Y && ballY - BALL_RADIUS <= PADDLE_INITIAL_Y + PADDLE_H && ballX + BALL_RADIUS >= paddleX && ballX - BALL_RADIUS <= paddleX + PADDLE_W){
@@ -104,7 +99,7 @@ function moveBall() {
             score += SCORE_JUMP
             touchedWall = false
         }
-        ballDirectionY *= -1;
+        ballDirectionY = (ballDirectionY*-1) + Math.random()/10
     }
 
     ballX += BALL_SPEED * ballDirectionX;
@@ -139,6 +134,10 @@ async function gameOver(){
     ctx.fillText(GAME_OVER_TEXT, GAME_OVER_X, GAME_OVER_Y); 
 }
 
+function random(min, max) {
+    return Math.floor(Math.random() * (max - min) ) + min;
+}
+
 var paddleX = PADDLE_INITIAL_X;
 
 
@@ -151,6 +150,6 @@ var score = 0;
 
 var touchedWall = false;
 
-document.addEventListener("keydown", handleKeyPress);
+document.addEventListener("mousemove", handleMouseMove);
 
 var gameInterval = setInterval(updateGame, SCREEN_UPDATE_DELAY)
