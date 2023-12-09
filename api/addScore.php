@@ -3,10 +3,19 @@
     // ini_set('display_errors', 1);
     include_once("database.php");
 
-    $score = $_POST["score"];
-    $username = $_POST["username"];
+    $score = $db -> escapeStrings($_POST["score"]);
+    $username =  $db -> escapeStrings(strtolower($_POST["username"]));
 
     $db = new Database();
 
-    $db -> query("INSERT INTO ju_pong_scores (username, score) VALUES ('$username', '$score')")
+    $pastScores = $db -> select("SELECT * FROM ju_pong_scores WHERE username = '$username'");
+    if (count($pastScores) >= 1) {
+        if($pastScores["score"] > $score){
+            $db -> query("UPDATE ju_pong_scores SET score = '$score' WHERE username = '$username'");
+        }
+    }else {
+        $db -> query("INSERT INTO ju_pong_scores (username, score) VALUES ('$username', '$score')");
+    }
+
+
 ?>

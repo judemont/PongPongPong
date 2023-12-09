@@ -10,14 +10,14 @@
 </head>
 <body>
     <div class='leader_bord'>
-        <h2>Leader Bord :</h2>
+        <h2>Global Leader Bord :</h2>
         <?php
             // error_reporting(E_ALL);
             // ini_set('display_errors', 1);
             include_once("api/database.php");
 
             $db = new Database;
-            $leaderBord = $db -> select("SELECT * from ju_pong_scores ORDER BY score LIMIT 1");
+            $leaderBord = $db -> select("SELECT * from ju_pong_scores ORDER BY score");
 
             $i = 1;
             foreach($leaderBord as $result){
@@ -29,8 +29,8 @@
         ?>
     </div>
 
-    <input type="text" placeholder="Username" id="usernameInput" class="username_input">
-    <button onclick="start()" class="play_again_button" id="playAgainButton">PLAY</button>
+    <input type="text" required maxlength="99" placeholder="Username" id="usernameInput" class="username_input">
+    <button type="submit" onclick="start()" class="play_again_button" id="playAgainButton">PLAY</button>
 
     <canvas class="game-canvas" id="gameCanvas"></canvas> 
 </body>
