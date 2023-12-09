@@ -33,17 +33,12 @@ const BALL_SCORE_ACCELERATION = 5000
 const ARROW_LEFT = 37;
 const ARROW_RIGHT = 39;
 
-const GAME_OVER_TEXT = "GAME OVER.-!";
-const GAME_OVER_FONT = "30px Arial";
-const GAME_OVER_COLOR = "RED";
-const GAME_OVER_X = CANVAS_WIDTH / 2;
-const GAME_OVER_Y = CANVAS_HEIGHT / 2;
 
 const SCORE_JUMP = 50;
 const SCORE_TEXT = "SCORE : ";
 const SCORE_FONT = "30px Arial";
 const SCORE_COLOR = "red";
-const SCORE_X = CANVAS_WIDTH / 100 * 25; // 7%
+const SCORE_X = CANVAS_WIDTH / 100 * 80; // 7%
 const SCORE_Y = CANVAS_HEIGHT / 100 * 5; // 5%
 
 
@@ -53,7 +48,7 @@ const PLAY_AGAIN_BUTTON = document.getElementById("playAgainButton")
 const USERNAME_INPUT = document.getElementById("usernameInput")
 
 
-function clear() {
+async function clear() {
     ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 }
 
@@ -137,9 +132,10 @@ function updateGame(){
     drawScore()
 }
 
-async function gameOver(){
+function gameOver(){
     clearInterval(gameInterval)
-    start()
+    clear()
+    window.location.reload();
 }
 
 function random(min, max) {
