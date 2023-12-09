@@ -23,7 +23,7 @@
             foreach($leaderBord as $result){
                 $username = $result["username"];
                 $score = $result["score"];
-                echo "<p>#<b>$i</b> $username : $score</p><br>";
+                echo "<p>#<b>$i</b> $username : $score</p>";
                 $i ++;
             }
         ?>

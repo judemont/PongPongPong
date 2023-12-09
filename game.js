@@ -43,15 +43,11 @@ const SCORE_JUMP = 50;
 const SCORE_TEXT = "SCORE : ";
 const SCORE_FONT = "30px Arial";
 const SCORE_COLOR = "red";
-const SCORE_X = CANVAS_WIDTH / 100 * 7; // 7%
+const SCORE_X = CANVAS_WIDTH / 100 * 25; // 7%
 const SCORE_Y = CANVAS_HEIGHT / 100 * 5; // 5%
 
 
-const BEST_SCORE_TEXT = "BEST SCORE : ";
-const BEST_SCORE_FONT = "30px Arial";
-const BEST_SCORE_COLOR = "green";
-const BEST_SCORE_X = CANVAS_WIDTH / 100 * 25; // 25%
-const BEST_SCORE_Y = CANVAS_HEIGHT / 100 * 5; // 5%
+
 
 const PLAY_AGAIN_BUTTON = document.getElementById("playAgainButton")
 const USERNAME_INPUT = document.getElementById("usernameInput")
@@ -110,6 +106,7 @@ function moveBall() {
         if(touchedWall){
             score += SCORE_JUMP
             touchedWall = false
+            updateScore()
         }
         ballDirectionY = (ballDirectionY*-1)
     }
@@ -119,20 +116,13 @@ function moveBall() {
 }
 
 async function updateScore(){
+    console.log("updateScore")
     ctx.font = SCORE_FONT;
     ctx.fillStyle = SCORE_COLOR;
     ctx.textAlign = "center";
     ctx.fillText(SCORE_TEXT + score, SCORE_X, SCORE_Y); 
 
-    if(score > localStorage.getItem("bestScore")){
-        localStorage.setItem("bestScore", score);
-        sendBestScore()
-    }
-    
-    ctx.font = BEST_SCORE_FONT;
-    ctx.fillStyle = BEST_SCORE_COLOR;
-    ctx.textAlign = "center";
-    ctx.fillText(BEST_SCORE_TEXT + localStorage.getItem("bestScore"), BEST_SCORE_X, BEST_SCORE_Y); 
+    sendScore()
 }
 
 function updateGame(){
@@ -145,7 +135,6 @@ function updateGame(){
     clear();
     drawPaddle(paddleX, PADDLE_INITIAL_Y);
     drawBall(ballX, ballY);
-    updateScore()
     ballSpeed += score / SCORE_JUMP / BALL_SCORE_ACCELERATION
 }
 
@@ -163,11 +152,11 @@ function random(min, max) {
     return Math.floor(Math.random() * (max - min) ) + min;
 }
 
-function sendBestScore() {
+function sendScore() {
     var formData = new FormData();
 
     formData.append('username', USERNAME_INPUT.value);
-    formData.append('score', localStorage.getItem("bestScore"));
+    formData.append('score', score);
 
     fetch("api/addScore.php", {
         method: "post",
