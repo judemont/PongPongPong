@@ -18,12 +18,13 @@ const PADDLE_W = 150;
 const PADDLE_H = 20;
 const PADDLE_COLOR = "green";
 const PADDLE_SPEED_X = 50;
+const PADDLE_BORDER_RADIUS = 10;
 const PADDLE_INITIAL_X = (CANVAS_WIDTH - PADDLE_W) / 2;
 const PADDLE_INITIAL_Y = (CANVAS_HEIGHT - PADDLE_H) / 100 * 90; // 90%
 
 const BALL_RADIUS = 15;
 const BALL_COLOR = "red";
-var BALL_SPEED = 3;
+const INITIAL_BALL_SPEED = 3
 const BALL_INITIAL_X = (CANVAS_WIDTH - PADDLE_W) / 2 + random(-1000, 1000);
 const BALL_INITIAL_Y = (CANVAS_HEIGHT - PADDLE_H) / 100 * 10; // 10%
 const BALL_SCORE_ACCELERATION = 5000
@@ -52,13 +53,15 @@ const BEST_SCORE_COLOR = "green";
 const BEST_SCORE_X = CANVAS_WIDTH / 100 * 25; // 25%
 const BEST_SCORE_Y = CANVAS_HEIGHT / 100 * 5; // 5%
 
+const PLAY_AGAIN_BUTTON = document.getElementById("playAgainButton")
+
 function clear() {
     ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 }
 
 async function drawPaddle(x, y) {
     ctx.beginPath();
-    ctx.rect(x, y, PADDLE_W, PADDLE_H);
+    ctx.roundRect(x, y, PADDLE_W, PADDLE_H, PADDLE_BORDER_RADIUS);
     ctx.fillStyle = PADDLE_COLOR;
     ctx.fill();
     ctx.closePath();
@@ -109,8 +112,8 @@ function moveBall() {
         ballDirectionY = (ballDirectionY*-1)
     }
 
-    ballX += BALL_SPEED * ballDirectionX;
-    ballY += BALL_SPEED * ballDirectionY;
+    ballX += ballSpeed * ballDirectionX;
+    ballY += ballSpeed * ballDirectionY;
 }
 
 async function updateScore(){
@@ -132,6 +135,7 @@ async function updateScore(){
 function updateGame(){
     if(ballY >= CANVAS_HEIGHT) {
         gameOver();
+        clearInterval(gameInterval)
         return;
     }
     moveBall();
@@ -139,7 +143,7 @@ function updateGame(){
     drawPaddle(paddleX, PADDLE_INITIAL_Y);
     drawBall(ballX, ballY);
     updateScore()
-    BALL_SPEED += score / SCORE_JUMP / BALL_SCORE_ACCELERATION
+    ballSpeed += score / SCORE_JUMP / BALL_SCORE_ACCELERATION
 }
 
 async function gameOver(){
@@ -148,24 +152,45 @@ async function gameOver(){
     ctx.fillStyle = GAME_OVER_COLOR;
     ctx.textAlign = "center";
     ctx.fillText(GAME_OVER_TEXT, GAME_OVER_X, GAME_OVER_Y); 
+
+    PLAY_AGAIN_BUTTON.style.display = "block";
 }
 
 function random(min, max) {
     return Math.floor(Math.random() * (max - min) ) + min;
 }
 
+function start() {
+    console.log("start");
+    PLAY_AGAIN_BUTTON.style.display = "none";
+
+    paddleX = PADDLE_INITIAL_X;
+
+
+    ballX = BALL_INITIAL_X;
+    ballY = BALL_INITIAL_Y;
+    ballDirectionY = -1
+    ballDirectionX = -1
+    ballSpeed = INITIAL_BALL_SPEED
+    score = 0;
+    
+    touchedWall = false;
+    
+    document.addEventListener("mousemove", handleMouseMove);
+    
+    gameInterval = setInterval(updateGame, SCREEN_UPDATE_DELAY)
+}
+
+
 var paddleX = PADDLE_INITIAL_X;
 
 
-var ballX = BALL_INITIAL_X;
-var ballY = BALL_INITIAL_Y;
-var ballDirectionY = -1
-var ballDirectionX = -1
+var ballX
+var ballY
+var ballDirectionY
+var ballDirectionX
+var ballSpeed
+var score
 
-var score = 0;
-
-var touchedWall = false;
-
-document.addEventListener("mousemove", handleMouseMove);
-
-var gameInterval = setInterval(updateGame, SCREEN_UPDATE_DELAY)
+var touchedWall
+var gameInterval
