@@ -32,9 +32,55 @@ html, body {
     align-items: center;
     cursor: pointer;
 
+    color: white;
+
+
     transition: 0.2s;
 }
 
 .play_again_button:hover {
     height: 100px;
+}
+
+.username_input:hover {
+    height: 100px;
+}
+
+.username_input {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 999;
+    width: 20vw;
+    height: 40px;
+
+    border-radius: 15px;
+    border: none;
+    outline: none;
+
+    background-color: rgb(0, 139, 19);
+    color: rgb(255, 255, 255);
+
+    transition: 0.2s;
+}
+
+input:focus{
+    outline: none;
+}
+
+.leader_bord {
+    color: aqua;
+
+    position: absolute;
+
+    width: fit-content;
+    max-height: 10%;
+
+    margin-left: 30px;
+
+}
+
+.leader_bord p {
+    margin-left: 20px;
 }

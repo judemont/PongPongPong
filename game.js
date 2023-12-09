@@ -54,6 +54,8 @@ const BEST_SCORE_X = CANVAS_WIDTH / 100 * 25; // 25%
 const BEST_SCORE_Y = CANVAS_HEIGHT / 100 * 5; // 5%
 
 const PLAY_AGAIN_BUTTON = document.getElementById("playAgainButton")
+const USERNAME_INPUT = document.getElementById("usernameInput")
+
 
 function clear() {
     ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
@@ -124,6 +126,7 @@ async function updateScore(){
 
     if(score > localStorage.getItem("bestScore")){
         localStorage.setItem("bestScore", score);
+        sendBestScore()
     }
     
     ctx.font = BEST_SCORE_FONT;
@@ -160,8 +163,20 @@ function random(min, max) {
     return Math.floor(Math.random() * (max - min) ) + min;
 }
 
+function sendBestScore() {
+    var formData = new FormData();
+
+    formData.append('username', USERNAME_INPUT.value);
+    formData.append('score', localStorage.getItem("bestScore"));
+
+    fetch("api/addScore.php", {
+        method: "post",
+        body: formData,
+    })
+}
+
 function start() {
-    console.log("start");
+    USERNAME_INPUT.style.display = 'none';
     PLAY_AGAIN_BUTTON.style.display = "none";
 
     paddleX = PADDLE_INITIAL_X;
