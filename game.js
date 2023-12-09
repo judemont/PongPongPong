@@ -106,7 +106,7 @@ function moveBall() {
         if(touchedWall){
             score += SCORE_JUMP
             touchedWall = false
-            updateScore()
+            sendScore()
         }
         ballDirectionY = (ballDirectionY*-1)
     }
@@ -115,14 +115,12 @@ function moveBall() {
     ballY += ballSpeed * ballDirectionY;
 }
 
-async function updateScore(){
-    console.log("updateScore")
+
+async function drawScore() {
     ctx.font = SCORE_FONT;
     ctx.fillStyle = SCORE_COLOR;
     ctx.textAlign = "center";
     ctx.fillText(SCORE_TEXT + score, SCORE_X, SCORE_Y); 
-
-    sendScore()
 }
 
 function updateGame(){
@@ -136,16 +134,12 @@ function updateGame(){
     drawPaddle(paddleX, PADDLE_INITIAL_Y);
     drawBall(ballX, ballY);
     ballSpeed += score / SCORE_JUMP / BALL_SCORE_ACCELERATION
+    drawScore()
 }
 
 async function gameOver(){
     clearInterval(gameInterval)
-    ctx.font = GAME_OVER_FONT;
-    ctx.fillStyle = GAME_OVER_COLOR;
-    ctx.textAlign = "center";
-    ctx.fillText(GAME_OVER_TEXT, GAME_OVER_X, GAME_OVER_Y); 
-
-    PLAY_AGAIN_BUTTON.style.display = "block";
+    start()
 }
 
 function random(min, max) {
@@ -162,9 +156,11 @@ function sendScore() {
         method: "post",
         body: formData,
     })
+    
 }
 
 function start() {
+
     USERNAME_INPUT.style.display = 'none';
     PLAY_AGAIN_BUTTON.style.display = "none";
 

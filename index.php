@@ -17,7 +17,7 @@
             include_once("api/database.php");
 
             $db = new Database;
-            $leaderBord = $db -> select("SELECT * from ju_pong_scores ORDER BY score");
+            $leaderBord = $db -> select("SELECT * from ju_pong_scores ORDER BY score DESC");
 
             $i = 1;
             foreach($leaderBord as $result){

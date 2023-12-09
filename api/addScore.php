@@ -10,7 +10,8 @@
 
 
 
-    $pastScores = $db -> select("SELECT * FROM ju_pong_scores WHERE username = '$username'");
+    $pastScores = $db -> select("SELECT * FROM ju_pong_scores WHERE username = '$username'")[0];
+
     if (count($pastScores) >= 1) {
         if($score > $pastScores["score"]){
             $db -> query("UPDATE ju_pong_scores SET score = '$score' WHERE username = '$username'");
