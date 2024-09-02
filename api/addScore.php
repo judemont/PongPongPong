@@ -5,8 +5,8 @@
 
     $db = new Database();
 
-    $score = $db -> escapeStrings($_POST["score"]);
-    $username =  $db -> escapeStrings(strtolower($_POST["username"]));
+    $score = $db -> htmlspecialchars(escapeStrings($_POST["score"]));
+    $username =  $db -> htmlspecialchars(escapeStrings(strtolower($_POST["username"])));
 
 
 

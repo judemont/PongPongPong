@@ -21,8 +21,8 @@
 
             $i = 1;
             foreach($leaderBord as $result){
-                $username = $result["username"];
-                $score = $result["score"];
+                $username = htmlspecialchars($result["username"]);
+                $score = htmlspecialchars($result["score"]);
                 echo "<p>#<b>$i</b> $username : $score</p>";
                 $i ++;
             }
